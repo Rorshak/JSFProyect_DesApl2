@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.prime.com.tr/ui">
+	  
+
+<f:view>
+
+	<h:head>
+		<title>Control de Roles</title>
+		<style type="text/css">
+.ui.widget{
+	font-size: 75% !important;
+}
+</style>
+</h:head>
+
+	<h:body>
+	<h:form id="frmGeneral">
+		<p:fieldset legend="Gestion de Roles" toggleable="true">
+			<p:messages id="messages"/>
+			<h:inputHidden id="id" size="60" 
+			value="#{securityRoleBean.securityRole.id}" />
+			
+			
+			<h:panelGrid columns="2"
+			style="font-family: Verdana, Arial; font-weight:bold;">
+			
+			<h:outputLabel id="lblName" value="*Role:" for="name"
+			style="float:right;"/>
+			<h:inputText id="name" size="60"
+			value="#{securityRoleBean.securityRole.name}" required="true"
+			requiredMessage="Campo [Security Role] es obligatorio"/>
+			
+			<p:commandButton value="Guardar" action="#{securityRoleBean.save()}"
+						update="frmGeneral, messages, dtSecurityRoles" />
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="dtSecurityRoles"
+					emptyMessage="No se encontraron registros"
+					value="#{securityRoleBean.securityRoles}" var="r" 
+					style="text-align:center; font-weight: bold;">
+					<f:facet name="header">
+						<h:outputText value="Registro de roles" />
+					</f:facet>
+
+					<p:column >
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{r.name}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Control" />
+						</f:facet>
+						<f:ajax event="click" render="@form"
+							listener="#{securityRoleBean.remove(r)}">
+							<h:commandLink value="Eliminar" />
+						</f:ajax>
+
+						<p:spacer height="10" />
+
+						<f:ajax event="click" render="@form"
+							listener="#{rolSeguridadBean.search(r)}">
+							<h:commandLink value="Editar" />
+						</f:ajax>
+						</p:column>
+						<f:facet name="footer">
+							<h:outputText
+								value="Hay un total de #{securityRoleBean.count}
+							 Rol(es) registrados en el sistema." />
+						</f:facet>
+					
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
